@@ -179,6 +179,42 @@ td:first-child{font-weight:700;font-size:1.02rem;white-space:nowrap}
 #toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translate(-50%,30px);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:14px;font-size:.88rem;font-weight:600;opacity:0;pointer-events:none;transition:all .25s;z-index:200;max-width:92vw;text-align:center}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 footer{text-align:center;color:var(--sub);font-size:.74rem;padding:0 12px 30px}
+
+/* ---------- 50음도 표 ---------- */
+.kbtn{width:auto;padding:0 9px;font-family:'Klee One','Hiragino Sans',sans-serif;font-weight:600;font-size:.95rem}
+#kanaOv{position:fixed;inset:0;z-index:110;background:rgba(0,0,0,.45);display:none;align-items:flex-start;justify-content:center;padding:12px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+#kanaOv.show{display:flex}
+.kana-box{background:var(--card);border-radius:22px;padding:14px;max-width:900px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.3);margin:auto 0}
+.kana-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.kana-head h3{margin:0;margin-right:auto;font-size:1.05rem}
+.ktabs{display:flex;gap:4px;background:var(--card2);border:1px solid var(--line);padding:3px;border-radius:12px;margin-bottom:10px;overflow-x:auto}
+.ktab{flex:1;padding:7px 8px;border-radius:9px;font-size:.84rem;font-weight:700;color:var(--sub);white-space:nowrap}
+.ktab.on{background:var(--accent);color:#fff}
+.kopts{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px;font-size:.8rem;color:var(--sub)}
+.kgrid-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.kgrid-wrap.single{grid-template-columns:1fr}
+.kpanel{border:2px solid var(--text);border-radius:4px;overflow:hidden;background:var(--card)}
+.ktitle{display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 6px 6px;border-bottom:2px solid var(--text);background:var(--card)}
+.ktitle .emo{font-size:1.7rem;line-height:1}
+.ktitle .tt{text-align:center;line-height:1.1}
+.ktitle .tt b{display:block;font-family:'Klee One','Hiragino Sans',sans-serif;font-size:1.65rem;font-weight:600;letter-spacing:1px}
+.ktitle .tt small{font-size:.78rem;font-weight:700;color:var(--sub)}
+.kgrid{display:grid;grid-template-columns:repeat(5,1fr)}
+.kgrid.c3{grid-template-columns:repeat(3,1fr)}
+.kc{border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-height:68px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 2px;transition:background .15s}
+.kgrid .kc:nth-child(5n){border-right:none}
+.kgrid.c3 .kc:nth-child(5n){border-right:1px solid var(--line)}.kgrid.c3 .kc:nth-child(3n){border-right:none}
+button.kc:active,button.kc.play{background:var(--accent-s)}
+.kc .kj{font-family:'Klee One','Hiragino Sans',sans-serif;font-weight:600;font-size:1.75rem;line-height:1.1}
+.kc .kr{font-size:.74rem;font-weight:700;margin-top:2px;white-space:nowrap}
+.kc .kr i{font-style:normal;color:var(--sub);font-weight:500;font-size:.66rem}
+.kc.empty{background:var(--card2)}
+.kc.conf .kj{color:var(--accent)}
+.khide .kc .kr{color:transparent;background:var(--mask);border-radius:5px}
+.khide .kc .kr i{color:transparent}
+.khide .kc.peek .kr,.khide .kc.peek .kr i{color:inherit;background:none}
+.knote{font-size:.76rem;color:var(--sub);margin-top:10px;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+@media (max-width:640px){.kgrid-wrap{grid-template-columns:1fr}.kc{min-height:60px}.kc .kj{font-size:1.55rem}}
 @media (max-width:560px){
  .brand small{display:none}.seg button{padding:6px 8px;font-size:.8rem}.pill{font-size:.78rem;padding:6px 8px}
  .weeks{grid-template-columns:repeat(4,1fr)}.dy b{font-size:.7rem}.dy small{font-size:.58rem}
@@ -193,6 +229,7 @@ footer{text-align:center;color:var(--sub);font-size:.74rem;padding:0 12px 30px}
   <div class="row">
    <div class="brand">🗾 여행 일본어 56<small>11.12 → 1.7 출국</small></div>
    <span class="dday" id="dday">D-56</span>
+   <button class="ib kbtn" id="kanaBtn" title="히라가나·가타카나 표">あア</button>
    <button class="ib" id="calBtn" title="출석부">📅</button>
    <button class="ib" id="darkBtn" title="다크 모드">🌙</button>
   </div>
@@ -216,6 +253,7 @@ footer{text-align:center;color:var(--sub);font-size:.74rem;padding:0 12px 30px}
 </div>
 <footer>매일 10분 · STEP 1 원리 → STEP 2 카드 연습 → STEP 3 조립 퀴즈 🌸 · 진도는 이 기기 브라우저에 자동 저장돼요</footer>
 <div id="stampOv"></div>
+<div id="kanaOv"></div>
 <div id="toast"></div>
 <script>
 /* ====== 8주 56일 커리큘럼 데이터 ======
@@ -586,7 +624,7 @@ const DAYS=[
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const h=(tag,cls,html)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;};
 const KEY='jp56_trip_v1';
-const DEF={mode:'basic',dark:matchMedia('(prefers-color-scheme: dark)').matches,mask:true,done:{},mem:{},cur:null,penOnly:false,rate:0.85,sub:'tile'};
+const DEF={mode:'basic',dark:matchMedia('(prefers-color-scheme: dark)').matches,mask:true,done:{},mem:{},cur:null,kHide:false,kConf:true,penOnly:false,rate:0.85,sub:'tile'};
 let S;try{S=Object.assign({},DEF,JSON.parse(localStorage.getItem(KEY)||'{}'));}catch(e){S={...DEF};}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
 
@@ -1038,6 +1076,67 @@ $('#main').addEventListener('click',e=>{
   const g=e.target.closest('.pager [data-go]');if(g)go(+g.dataset.go);
 });
 $('#main').addEventListener('change',e=>{const i=e.target.closest('input[data-mem]');if(i)setMem(i.dataset.mem,i.checked);});
+
+
+/* ====================================================
+   📖 히라가나·가타카나 50음도 표
+   ==================================================== */
+const K50={
+ hira:'あいうえお かきくけこ さしすせそ たちつてと なにぬねの はひふへほ まみむめも や_ゆ_よ らりるれろ わ___を ん____',
+ kata:'アイウエオ カキクケコ サシスセソ タチツテト ナニヌネノ ハヒフヘホ マミムメモ ヤ_ユ_ヨ ラリルレロ ワ___ヲ ン____',
+ roma:'a i u e o|ka ki ku ke ko|sa shi su se so|ta chi tsu te to|na ni nu ne no|ha hi fu he ho|ma mi mu me mo|ya _ yu _ yo|ra ri ru re ro|wa _ _ _ wo|n _ _ _ _',
+ kor:'아 이 우 에 오|카 키 쿠 케 코|사 시 스 세 소|타 치 츠 테 토|나 니 누 네 노|하 히 후 헤 호|마 미 무 메 모|야 _ 유 _ 요|라 리 루 레 로|와 _ _ _ 오|응 _ _ _ _'};
+const KD={ /* 탁음·반탁음 */
+ hira:'がぎぐげご ざじずぜぞ だぢづでど ばびぶべぼ ぱぴぷぺぽ',kata:'ガギグゲゴ ザジズゼゾ ダヂヅデド バビブベボ パピプペポ',
+ roma:'ga gi gu ge go|za ji zu ze zo|da ji zu de do|ba bi bu be bo|pa pi pu pe po',
+ kor:'가 기 구 게 고|자 지 즈 제 조|다 지 즈 데 도|바 비 부 베 보|파 피 푸 페 포'};
+const KY={ /* 요음 */
+ hira:'きゃきゅきょ しゃしゅしょ ちゃちゅちょ にゃにゅにょ ひゃひゅひょ みゃみゅみょ りゃりゅりょ ぎゃぎゅぎょ じゃじゅじょ びゃびゅびょ ぴゃぴゅぴょ',
+ kata:'キャキュキョ シャシュショ チャチュチョ ニャニュニョ ヒャヒュヒョ ミャミュミョ リャリュリョ ギャギュギョ ジャジュジョ ビャビュビョ ピャピュピョ',
+ roma:'kya kyu kyo|sha shu sho|cha chu cho|nya nyu nyo|hya hyu hyo|mya myu myo|rya ryu ryo|gya gyu gyo|ja ju jo|bya byu byo|pya pyu pyo',
+ kor:'캬 큐 쿄|샤 슈 쇼|챠 츄 쵸|냐 뉴 뇨|햐 휴 효|먀 뮤 묘|랴 류 료|갸 규 교|쟈 쥬 죠|뱌 뷰 뵤|퍄 퓨 표'};
+const KCONF=new Set([...'さちきそはほけねれわぬめるろこいりシツソンクケタメナルレユヨコロ']);
+function kanaCells(set,script,yoon){
+  const rows=set[script].split(' '),ro=set.roma.split('|'),ko=set.kor.split('|');
+  const out=[];
+  rows.forEach((r,ri)=>{
+    const chars=yoon?r.match(/.[ゃゅょャュョ]/g):[...r];
+    const rr=ro[ri].split(' '),kk=ko[ri].split(' ');
+    chars.forEach((c,ci)=>out.push(c==='_'?null:{c,r:rr[ci],k:kk[ci]}));
+  });return out;}
+function kanaPanel(set,script,yoon){
+  const isH=script==='hira';
+  const cells=kanaCells(set,script,yoon);
+  return `<div class="kpanel"><div class="ktitle">${isH?'<span class="emo">🍓</span>':''}<div class="tt"><b>${isH?'ひらがな':'カタカナ'}</b><small>${isH?'히라가나':'가타카나'}</small></div>${isH?'':'<span class="emo">🍙</span>'}</div>
+   <div class="kgrid ${yoon?'c3':''}">${cells.map(x=>x?`<button class="kc ${S.kConf&&!yoon&&KCONF.has(x.c)?'conf':''}" data-k="${x.c}"><span class="kj">${x.c}</span><span class="kr">${x.k} <i>(${x.r})</i></span></button>`:'<div class="kc empty"></div>').join('')}</div></div>`;}
+let kTab='basic',kView='both';
+function renderKana(){
+  const set=kTab==='basic'?K50:kTab==='daku'?KD:KY,yoon=kTab==='yoon';
+  const panels=(kView!=='kata'?kanaPanel(set,'hira',yoon):'')+(kView!=='hira'?kanaPanel(set,'kata',yoon):'');
+  const notes={basic:'🔴 빨간 글자 = 모양이 비슷해서 헷갈리는 글자 (さ/ち, は/ほ, ね/れ/わ, シ/ツ, ソ/ン …). 1주차 Day 1~2, 4~6에서 집중 연습해요.<br>※ は·へ·を는 조사로 쓰일 때 각각 <b>와·에·오</b>로 읽어요.',
+    daku:'゛(탁점) = 탁한 소리(ㄱ·ㅈ·ㄷ·ㅂ), ゜(반탁점) = ㅍ 소리. ぢ·づ는 じ·ず와 발음이 같고 거의 쓰이지 않아요. (1주차 Day 3)',
+    yoon:'い단 글자 + 작은 ゃ·ゅ·ょ = 한 박자. 예) きょう(쿄-), でんしゃ(덴샤). (1주차 Day 3)'};
+  $('#kanaOv').innerHTML=`<div class="kana-box">
+   <div class="kana-head"><h3>📖 50음도 표</h3><button class="sbtn" data-kclose>닫기 ✕</button></div>
+   <div class="ktabs">${[['basic','기본 (청음)'],['daku','탁음·반탁음'],['yoon','요음']].map(([k,l])=>`<button class="ktab ${kTab===k?'on':''}" data-kt="${k}">${l}</button>`).join('')}</div>
+   <div class="kopts">
+     <div class="seg" style="padding:2px">${[['both','둘 다'],['hira','ひらがな'],['kata','カタカナ']].map(([k,l])=>`<button class="${kView===k?'on':''}" data-kv="${k}">${l}</button>`).join('')}</div>
+     <button class="pill ${S.kHide?'on':''}" data-kh>${S.kHide?'🙈 발음 가림':'👀 발음 보기'}</button>
+     <button class="pill ${S.kConf?'on':''}" data-kc>🔴 헷갈리는 글자</button>
+     <span>글자를 터치하면 🔊 발음</span></div>
+   <div class="kgrid-wrap ${kView==='both'?'':'single'} ${S.kHide?'khide':''}">${panels}</div>
+   <div class="knote">${notes[kTab]}</div></div>`;
+}
+$('#kanaBtn').onclick=()=>{renderKana();$('#kanaOv').classList.add('show');};
+$('#kanaOv').addEventListener('click',e=>{
+  if(e.target.id==='kanaOv'||e.target.closest('[data-kclose]')){$('#kanaOv').classList.remove('show');return;}
+  const t=e.target.closest('[data-kt]');if(t){kTab=t.dataset.kt;renderKana();return;}
+  const v=e.target.closest('[data-kv]');if(v){kView=v.dataset.kv;renderKana();return;}
+  if(e.target.closest('[data-kh]')){S.kHide=!S.kHide;save();renderKana();return;}
+  if(e.target.closest('[data-kc]')){S.kConf=!S.kConf;save();renderKana();return;}
+  const c=e.target.closest('[data-k]');if(c){speak(c.dataset.k);c.classList.add('peek','play');setTimeout(()=>c.classList.remove('play'),400);}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('#kanaOv').classList.remove('show');$('#stampOv').classList.remove('show');}});
 
 /* ---------- 시작 ---------- */
 if(!S.cur)S.cur=todayNum();
